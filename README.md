@@ -2,7 +2,7 @@ This repository is for storing my source codes to practice basic data strcutre a
 It follows basic-algorithm lecture by barkingdog.  
 
 The lecture I am following is below  
-blog : https://blog.encrypted.gg/
+blog : https://blog.encrypted.gg  
 github : https://github.com/encrypted-def/basic-algo-lecture/tree/master  
 
 I started it on April 23.  
