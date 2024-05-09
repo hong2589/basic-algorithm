@@ -4,26 +4,27 @@ int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
 
-    char buffer[100001];
+    char buffer[100100];
     cin >> buffer;
+    
     int len = strlen(buffer);
-    list<int> L;
-    list<int>::iterator it = L.begin();
+    vector<int> V;
     int cnt = 0;
 
     for (int i = 0; i < len; i++){
         if (buffer[i] == '('){
-            L.insert(it, 1);
+            V.push_back(1);
         }
         else {
-            // pop
-            it--;
-            if (*it != 1) cnt += *it;
-            it = L.erase(it); 
-
-            // update
-            for (list<int>::iterator t = L.begin(); t != L.end(); t++){
-                *t += 1;
+            if (V.back() == 1) {
+                V.pop_back();
+                for (vector<int>::iterator it = V.begin(); it != V.end(); it++){
+                    *it += 1;
+                }
+            }
+            else {
+                cnt += V.back();
+                V.pop_back();
             }
         }
     }
