@@ -3,55 +3,49 @@ using namespace std;
 #define X first
 #define Y second
 
-int main(){
-    ios::sync_with_stdio(0);
-    cin.tie(0);
+int n, m;
+int board[500][500];
+int vis[500][500];
+int dx[4] = {1, 0, -1, 0};
+int dy[4] = {0, 1, 0, -1};
 
-    // input
-    int n, m;
-    int board[500][500];
-    int vis[500][500] = {};
+int main(void){
     cin >> n >> m;
     for (int i = 0; i < n; i++){
         for (int j = 0; j < m; j++){
-            int val;
-            cin >> val;
-            board[i][j] = val;
+            cin >> board[i][j];
         }
     }
 
-    // BFS
-    int dx[4] = {1, 0, -1, 0};
-    int dy[4] = {0, 1, 0, -1};
-    queue<pair<int, int>> Q;
-    vector<int> V;
+    int maxSize = 0;
+    int numPic = 0;
+    
     for (int i = 0; i < n; i++){
         for (int j = 0; j < m; j++){
-            if (vis[i][j] || board[i][j] == 0) continue;
-            
+            if (board[i][j] == 0 || vis[i][j] == 1) continue;
+
+            numPic++;
+            int size = 0;
+            queue<pair<int, int>> Q;
             vis[i][j] = 1;
             Q.push({i, j});
-            int size = 0;
-            while(!Q.empty()){
+            while (!Q.empty()){
+                size++;
                 pair<int, int> cur = Q.front(); Q.pop();
-                // cout << "(" << cur.X << ", " << cur.Y << ")\n";
-                size += 1;
                 for (int dir = 0; dir < 4; dir++){
-                    int nx = cur.X + dx[dir];
-                    int ny = cur.Y + dy[dir];
-                    if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-                    if (vis[nx][ny] || board[nx][ny] == 0) continue;
-                    vis[nx][ny] = 1;
-                    Q.push({nx, ny});
+                    int x = cur.X + dx[dir];
+                    int y = cur.Y + dy[dir];
+                    if (x < 0 || x >= n || y < 0 || y >= m) continue;
+                    if (board[x][y] == 0 || vis[x][y] == 1) continue;
+                    vis[x][y] = 1;
+                    Q.push({x, y});
                 }
             }
-            V.push_back(size);
+            if (size > maxSize) maxSize = size;
         }
     }
 
-    sort(V.begin(), V.end());
-    int maxSize = (V.empty())? 0 : V.back();
-    cout << V.size() << "\n";
+    cout << numPic << "\n";
     cout << maxSize << "\n";
     return 0;
 }
