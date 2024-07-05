@@ -25,7 +25,7 @@ void merge(int st, int en){
     int ridx = mid;
     for (int i = st; i < en; i++){
         if (ridx >= en) tmp[i] = arr[lidx++];
-        else if (lidx <= st) tmp[i] = arr[ridx++];
+        else if (lidx >= mid) tmp[i] = arr[ridx++];
         else if (arr[lidx] < arr[ridx]) tmp[i] = arr[lidx++];
         else tmp[i] = arr[ridx++];
     }
