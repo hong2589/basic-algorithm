@@ -12,7 +12,7 @@ int main(){
         cout << '\n';
     } while (next_permutation(a, a+4));
 
-    // 2. Permutation example
+    // 2. Combination example
     cout << '\n';
     cout << "===== 2. Combination =====\n";
     sort(a, a+4);
