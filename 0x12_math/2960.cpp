@@ -1,28 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<bool> state(1005, true);
-int n, k;
-int sieve(void){
-    int cnt = 0;
+int sieve(int n, int k){
+    vector<bool> state(1005, true);
     state[1] = false;
-    for (int i = 2; i*i <= n; i++){
+    int cnt = 0;
+    for (int i = 2; i <= n; i++){
         if (!state[i]) continue;
-        for (int j = i*i; j <= n; j += i){
+        for (int j = i; j <= n; j+=i){
             if (state[j]){
-                cnt += 1;
+                cnt++;
                 state[j] = false;
-                if (cnt == k) return j;
+                if (cnt == k){
+                    return j;
+                }
             }
         }
     }
-    return 0;
+    return -1;
 }
 
 int main(){
-    ios::sync_with_stdio(0);
-    cin.tie(0);
+    int n, k;
     cin >> n >> k;
-    cout << sieve() << '\n';
+    cout << sieve(n,k) << '\n';
     return 0;
 }
