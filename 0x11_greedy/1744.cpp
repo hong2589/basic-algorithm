@@ -1,45 +1,38 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+long long ans = 0;
+
+void sum(vector<int> V){
+    while (V.size() > 1){
+        ans += *(V.end()-1) * *(V.end()-2);
+        V.pop_back();
+        V.pop_back();
+    }
+    if (V.size() == 1) ans += V[0];
+}
+
 int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
+
     int n;
-    vector<int> V;
-    bool zero = false;
+    vector<int> Vpos;
+    vector<int> Vneg;
     cin >> n;
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++){
         int val;
         cin >> val;
-        if (val == 0){
-            zero = true;
-            n -= 1;
-        }
-        else {
-            V.push_back(val);
-        }
-    }
-    sort(V.begin(), V.end());
-    
-    if (n == 1){
-        cout << V[0] << '\n';
-        return 0;
+        if (val == 1) ans++;
+        else if (val > 0) Vpos.push_back(val);
+        else Vneg.push_back(val);
     }
 
-    int sum1 = 0;
-    int sum2 = 0;
-    if (zero){
-        for (int i = 1; i < n; i+=2){
-            
-        }
-    }
-    else {
-        if (n % 2 == 0){
-            for (int i = 0; i < n; i+=2){
-                
-            }
-        }
-    }
-    
+    sort(Vpos.begin(), Vpos.end());
+    sort(Vneg.begin(), Vneg.end(), greater<int>());
+
+    sum(Vpos);
+    sum(Vneg);
+    cout << ans << '\n';
     return 0;
 }
