@@ -1,33 +1,41 @@
 #include <bits/stdc++.h>
 using namespace std;
-int lowerIdx(int sortedArr[], int n, int target){
+
+vector<int> tmp, uniq;
+int arr[1000000];
+
+int lower_idx(int target, int len){
     int st = 0;
-    int en = n;
+    int en = len;
     while (st < en){
         int mid = (st+en)/2;
-        if (sortedArr[mid] < target) st = mid+1;
-        else if (sortedArr[mid] >= target) en = mid;
+        if (uniq[mid] >= target) en = mid;
+        else st = mid+1;
     }
     return st;
 }
+
 int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
-
-    int arr[1000000];
-    int sortedArr[1000000];
+    
     int n;
     cin >> n;
-    for (int i = 0; i < n; i++) {
-        int t;
-        cin >> t;
-        arr[i] = t;
-        sortedArr[i] = t;
-    }
-    sort(sortedArr, sortedArr+n);
-    
     for (int i = 0; i < n; i++){
-        cout << lowerIdx(sortedArr, n, arr[i]) << ' ';
+        cin >> arr[i];
+        tmp.push_back(arr[i]);
     }
+
+    sort(tmp.begin(), tmp.end());
+    for (int i = 0; i < n; i++){
+        if (i == 0 || tmp[i] != tmp[i-1]){
+            uniq.push_back(tmp[i]);
+        }
+    }
+
+    for (int i = 0; i < n; i++){
+        cout << lower_idx(arr[i], uniq.size()) << ' ';
+    }
+    cout << '\n';
     return 0;
 }
