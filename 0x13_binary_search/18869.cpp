@@ -1,60 +1,66 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int m, n;
-int sortedSize[100][10000];
-vector<vector<int>> uniq;
-int comp[100][10000];
+int n,m;
+int arr[100][10000];
+vector<int> tmp[100];
+vector<int> uniq[100];
+vector<int> comp[100];
 
-int BinarySearch(vector<int> V, int target){
+int BinarySearch(vector<int> V, int target, int size){
     int st = 0;
-    int en = n-1;
+    int en = size-1;
     while (st <= en){
         int mid = (st+en)/2;
-        if (V[mid] < target) st = mid+1;
+        if (V[mid] < target) st =  mid+1;
         else if (V[mid] > target) en = mid-1;
         else return mid;
     }
     return -1;
 }
 
-int main(){
+int main(void){
     ios::sync_with_stdio(0);
     cin.tie(0);
 
-    int size[100][10000];
-    cin >> m >> n;
-    for (int i = 0; i < m; i++){
-        for (int j = 0; j < n; j++){
-            cin >> size[i][j];
-            sortedSize[i][j] = size[i][j];
+    cin >> n >> m;
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < m; j++){
+            cin >> arr[i][j];
+            tmp[i].push_back(arr[i][j]);
         }
-        sort(sortedSize[i], sortedSize[i]+n);
+        sort(tmp[i].begin(), tmp[i].end());
     }
-    
-    for (int i = 0; i < m; i++){
-        for (int j = 0; j < n; j++){
-            if (j == 0 || sortedSize[j] != sortedSize[j-1]){
-                uniq[i].push_back(sortedSize[i][j]);
+
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < m; j++){
+            if (j == 0 || tmp[i][j] != tmp[i][j-1]){
+                uniq[i].push_back(tmp[i][j]);
             }
         }
     }
 
-    // compress
-    for (int i = 0; i < m; i++){
-        for (int j = 0; j < n; j++){
-            comp[i][j] = BinarySearch(uniq[i], size[i][j]);
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < m; j++){
+            comp[i].push_back(BinarySearch(uniq[i], arr[i][j], uniq[i].size()));
         }
     }
+
+    // for (int i = 0; i < n; i++){
+    //     for (int j = 0; j < m; j++){
+    //         cout << comp[i][j] << ' ';
+    //     }
+    //     cout << '\n';
+    // }
 
     int cnt = 0;
-    for (int i = 0; i < m-1; i++){
-        for (int k = i+1; k < m; k++){
-            bool same = true;
-            for (int j = 0; j < n; j++){
-                if (comp[i][j] != comp[k][j]) same = false;
+    for (int i = 0; i < n-1; i++){
+        for (int k = i+1; k < n; k++){
+            bool isSimilar = true;
+            for (int j = 0; j < m; j++){
+                if (comp[i][j] != comp[k][j]) isSimilar = false;
             }
-            if (same) cnt += 1;
+            if (isSimilar) cnt += 1;
         }
     }
     cout << cnt << '\n';
