@@ -23,8 +23,8 @@ int main(){
 
     int n,m;
     cin >> n >> m;
-    for (int i = 0; i < n; ++i){
-        for (int j = 0; j < n; ++j){
+    for (int i = 1; i <= n; ++i){
+        for (int j = 1; j <= n; ++j){
             int x;
             cin >> x;
             if (x == 1){
@@ -34,7 +34,15 @@ int main(){
     }
 
     bool possible = true;
+    int u,v;
+    cin >> u;
+    --m;
     while (m--){
-        
+        cin >> v;
+        if (find(u) != find(v)) possible = false;
     }
+
+    if (possible) cout << "YES\n";
+    else cout << "NO\n";
+    return 0;
 }
