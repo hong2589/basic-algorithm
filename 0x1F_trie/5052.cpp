@@ -17,14 +17,13 @@ bool comp(string& a, string& b){
     }
 }
 
-char c2i(char c){
+int c2i(char c){\
     return c-'0';
 }
 
 void insert(string& s){
     int cur = ROOT;
     for (auto c : s){
-        cout << c2i(c) << '\n';
         if (nxt[cur][c2i(c)] == -1){
             nxt[cur][c2i(c)] = unused++;
         }
@@ -50,23 +49,20 @@ int main(){
     cin >> t;
     while (t--){
         int n;
-        vector<string> list;
-
         cin >> n;
         
-        unused = 2;
+        vector<string> list;
         while (n--){
             string s;
             cin >> s;
             list.push_back(s);
         }
+        sort(list.begin(), list.end(), comp);
 
         bool ans = true;
-        for (int i = 0; i < MX; ++i) {
-            fill(nxt[i], nxt[i]+10, -1);
-            fill(chk, chk+MX, 0);
-        }
-        sort(list.begin(), list.end(), comp);
+        unused = 2;
+        fill(chk, chk+MX, 0);
+        for (int i = 0; i < MX; ++i) fill(nxt[i], nxt[i]+10, -1);
         for (string s : list){
             if (!find(s)){
                 insert(s);
@@ -76,6 +72,7 @@ int main(){
                 break;
             }
         }
+
         if (ans) cout << "YES\n";
         else cout << "NO\n";
     }
