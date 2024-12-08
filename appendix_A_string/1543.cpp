@@ -1,29 +1,22 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int solve(string& s, string& p){
-    int cur = 0;
-    int ans = 0;
-    while (cur < s.size()){
-        cout << "cur : " << cur << '\n';
-        int nxt = s.substr(cur).find(p);
-        if (nxt == string::npos) break;
-        ++ans;
-        cur = nxt + p.size();
-    }
-    return ans;
-}
+typedef long long ll;
 
 int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
 
-    string s;
-    string p;
-    getline(cin, s);
-    getline(cin, p);
+    string a,b;
+    getline(cin, a);
+    getline(cin, b);
 
-    cout << solve(s,p) << '\n';
-
+    int ans = 0;
+    int cur = a.find(b);
+    while (cur != string::npos){
+        ++ans;
+        cur = a.find(b, cur+b.size());
+    }
+    cout << ans << '\n';
     return 0;
 }
