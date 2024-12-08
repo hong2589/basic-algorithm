@@ -10,3 +10,6 @@ My goal is to complete lecture from 0x00 to 0x0F until May ends.
 
 I completed main lectures on December 2!
 Now, I should study appendix lectures until 1st week of December ends.
+
+I also completed all the appendices on December 8!
+I should review lectures until 2024 ends.
