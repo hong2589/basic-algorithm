@@ -1,58 +1,67 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+int dist[51][51];
+vector<int> adj[51];
+
 int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
 
     int n;
-    int u, v;
-    vector<int> adj[51];
+    int u,v;
     cin >> n;
-    cin >> u >> v;
-    while (u > 0 && v > 0){
+    while (cin >> u >> v){
+        if (u == -1 && v == -1) break;
         adj[u].push_back(v);
         adj[v].push_back(u);
-        cin >> u >> v;
     }
 
-    int nomidate[51];
-    for (int i = 1; i <= n; ++i){
-        int dist[51];
-        int max_val = 0;
-        fill(dist+1, dist+n+1, -1);
+    // bfs
+    for (int st = 1; st <= n; ++st){
         queue<int> q;
-        q.push(i);
-        dist[i] = 0;
+        fill(dist[st]+1, dist[st]+1+n, -1);
+        dist[st][st] = 0;
+        q.push(st);
         while (!q.empty()){
             int cur = q.front();
             q.pop();
-            if (dist[cur] > max_val) max_val = dist[cur];
             for (int nxt : adj[cur]){
-                if (dist[nxt] >= 0) continue;
+                if (dist[st][nxt] >= 0) continue;
+                dist[st][nxt] = dist[st][cur] + 1;
                 q.push(nxt);
-                dist[nxt] = dist[cur] + 1;
             }
         }
-        nomidate[i] = max_val;
     }
 
-    // for (int i = 1; i <= n; ++i) cout << nomidate[i] << ' ';
-    // cout << '\n';
-
-    int min = 100;
     vector<int> ans;
+    int min_score = 0x3f3f3f3f;
     for (int i = 1; i <= n; ++i){
-        if (nomidate[i] > min) continue;
-        if (nomidate[i] < min) {
-            ans.clear();
-            min = nomidate[i];
+        int score = 0;
+        bool fail = false;
+        for (int j = 1; j <= n; ++j){
+            if (dist[i][j] == -1){
+                fail = true;
+                break;
+            }
+            if (dist[i][j] > score){
+                score = dist[i][j];
+            }
         }
-        ans.push_back(i);
-    }
 
-    cout << min << ' ' << ans.size() << '\n';
-    for (auto ent : ans) cout << ent << ' ';
+        if (fail) continue;
+        if (score < min_score){
+            ans.clear();
+            min_score = score;
+            ans.push_back(i);
+        }
+        else if (score == min_score){
+            ans.push_back(i);
+        }
+    }
+    cout << min_score << ' ' << ans.size() << '\n';
+    for (int x : ans) cout << x << ' ';
     cout << '\n';
+
     return 0;
 }

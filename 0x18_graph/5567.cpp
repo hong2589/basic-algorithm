@@ -2,6 +2,7 @@
 using namespace std;
 
 vector<int> adj[501];
+int dist[501];
 
 int main(){
     ios::sync_with_stdio(0);
@@ -16,22 +17,23 @@ int main(){
         adj[v].push_back(u);
     }
 
-    int dist[501];
-    fill(dist+1, dist+n+1, -1);
     queue<int> q;
-    int cnt = 0;
-    q.push(1);
+    fill(dist+2, dist+1+n, -1);
     dist[1] = 0;
+    q.push(1);
+
+    int cnt = 0;
     while (!q.empty()){
         int cur = q.front();
         q.pop();
-        if (dist[cur] <= 2) cnt += 1;
         for (int nxt : adj[cur]){
             if (dist[nxt] >= 0) continue;
+            dist[nxt] = dist[cur] + 1;
+            if (dist[nxt] == 1 || dist[nxt] == 2) ++cnt;
             q.push(nxt);
-            dist[nxt] = dist[cur] + 1; 
         }
     }
-    cout << cnt-1 << '\n';
+
+    cout << cnt << '\n';
     return 0;
 }
