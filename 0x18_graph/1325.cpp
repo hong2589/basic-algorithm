@@ -1,26 +1,24 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<int> adj[10002];
+vector<int> adj[10001];
+int cntArr[10001];
+bool vis[10001];
 
-int bfs(int st, int n){
+void bfs(int st){
     queue<int> q;
-    bool vis[10002];
-    int cnt = 0;
-    fill(vis+1, vis+n+1, 0);
-    vis[st] = 1;
     q.push(st);
+    vis[st] = true;
+    cntArr[st] = 1;
     while (!q.empty()){
-        int cur = q.front();
-        q.pop();
-        cnt += 1;
+        int cur = q.front(); q.pop();
+        cntArr[st]++;
         for (int nxt : adj[cur]){
             if (vis[nxt]) continue;
-            q.push(nxt);
             vis[nxt] = true;
+            q.push(nxt);
         }
     }
-    return cnt;
 }
 
 int main(){
@@ -35,21 +33,24 @@ int main(){
         adj[v].push_back(u);
     }
 
-    int max = 0;
+    for (int st = 1; st <= n; ++st){
+        fill(vis+1, vis+1+n, false);
+        bfs(st);
+    }
+
     vector<int> ans;
+    int cmp = 0;
     for (int i = 1; i <= n; ++i){
-        int cnt = bfs(i, n);
-        if (cnt > max){
-            max = cnt;
+        if (cntArr[i] > cmp){
+            cmp = cntArr[i];
             ans.clear();
             ans.push_back(i);
         }
-        else if (cnt == max){
+        else if (cntArr[i] == cmp){
             ans.push_back(i);
         }
     }
-
-    for (auto x : ans) cout << x << ' ';
+    for (int x : ans) cout << x << ' ';
     cout << '\n';
     return 0;
 }

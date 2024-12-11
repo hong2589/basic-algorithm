@@ -1,12 +1,30 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+vector<int> adj[101];
+int dist[101][101];
+int k_num[101];
+
+void bfs(int st){
+    queue<int> q;
+    q.push(st);
+    dist[st][st] = 0;
+    while (!q.empty()){
+        int cur = q.front();
+        q.pop();
+        for (int nxt : adj[cur]){
+            if (dist[st][nxt] >= 0) continue;
+            dist[st][nxt] = dist[st][cur]+1;
+            q.push(nxt);
+        }
+    }
+}
+
 int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
-
+    
     int n,m;
-    vector<int> adj[101];
     cin >> n >> m;
     while (m--){
         int u,v;
@@ -15,39 +33,22 @@ int main(){
         adj[v].push_back(u);
     }
 
-    int kv_num[101];
     for (int i = 1; i <= n; ++i){
-        int dist[101];
-        queue<int> q;
-        fill(dist+1, dist+n+1, -1);
-        dist[i] = 0;
-        q.push(i);
-        while (!q.empty()){
-            int cur = q.front();
-            q.pop();
-            for (int nxt : adj[cur]){
-                if (dist[nxt] >= 0) continue;
-                dist[nxt] = dist[cur] + 1;
-                q.push(nxt);
-            }
-        }
-
-        int num = 0;
+        fill(dist[i]+1, dist[i]+1+n, -1);
+        bfs(i);
         for (int j = 1; j <= n; ++j){
-            if (dist[j] > 0) num += dist[j];
+            k_num[i] += dist[i][j];
         }
-        kv_num[i] = num;
     }
 
-    // find min, idx
-    int min = 1<<30;
-    int idx;
+    int ans;
+    int min_val = 0x3f3f3f3f;
     for (int i = 1; i <= n; ++i){
-        // cout << kv_num[i] << ' ';
-        if (kv_num[i] >= min) continue;
-        min = kv_num[i];
-        idx = i;
+        if (k_num[i] < min_val){
+            ans = i;
+            min_val = k_num[i];
+        }
     }
-    cout << idx << '\n';
+    cout << ans << '\n';
     return 0;
 }
