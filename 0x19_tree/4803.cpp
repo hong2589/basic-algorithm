@@ -1,64 +1,59 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-bool IsTree(vector<int> adj[], int parent[], int st){
-    if (parent[st] != -1) return false;
-    
-    bool res = true;
+int n,m;
+
+bool bfs(int st, vector<int> adj[], bool vis[], int p[]){
     queue<int> q;
     q.push(st);
-    parent[st] = 0; // root node
+    vis[st] = true;
     while (!q.empty()){
         int cur = q.front();
         q.pop();
         for (int nxt : adj[cur]){
-            if (parent[nxt] != -1){
-                if (nxt != parent[cur]) res = false;
-                continue;
+            if (vis[nxt]){
+                if (p[cur] == nxt) continue;
+                else return false;
             }
+            p[nxt] = cur;
+            vis[nxt] = true;
             q.push(nxt);
-            parent[nxt] = cur;
         }
     }
-    return res;
+    return true;
 }
+
 
 int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
+    int caseNum = 1;
+    while (cin >> n >> m){
+        if (n == 0 && m == 0) return 0;
 
-    int n,m;
-    int caseCnt = 0;
-    cin >> n >> m;
-    while (n > 0 || m > 0){
         vector<int> adj[501];
-        while(m--){
+        bool vis[501];
+        int p[501];
+        fill(vis+1, vis+1+n, false);
+        fill(p+1, p+1+n, 0);
+        while (m--){
             int u,v;
             cin >> u >> v;
             adj[u].push_back(v);
             adj[v].push_back(u);
         }
 
-        int treeCnt = 0;
-        int parent[501];
-        fill(parent+1, parent+1+n, -1);
-        for (int st = 1; st <= n; ++st){
-            if (IsTree(adj, parent, st)){
-                treeCnt += 1;
-            }
+        int ans = 0;
+        for (int i = 1; i <= n; ++i){
+            if (vis[i]) continue;
+            if (bfs(i, adj, vis,p)) ++ans;
         }
-        
-        cout << "Case " << ++caseCnt << ": ";
-        if (treeCnt == 0){
-            cout << "No trees.\n";
-        }
-        else if (treeCnt == 1){
-            cout << "There is one tree.\n";
-        }
-        else {
-            cout << "A forest of " << treeCnt << " trees.\n";
-        }
-        cin >> n >> m;
+
+        cout << "Case " << caseNum << ": ";
+        if (ans == 0) cout << "No trees.\n";
+        else if (ans == 1) cout << "There is one tree.\n";
+        else cout << "A forest of " << ans << " trees.\n";
+        caseNum++;
     }
     return 0;
 }

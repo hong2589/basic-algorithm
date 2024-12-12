@@ -2,31 +2,22 @@
 using namespace std;
 
 int p[51];
-int n;
+vector<int> adj[51];
+int ans = 0;
 
-int LeafNum(int cur){
-    vector<int> child;
-    bool isLeaf = true;
-    for (int i = 0; i < n; ++i){
-        if (p[i] == cur){
-            isLeaf = false;
-            child.push_back(i);
-        }
+void dfs(int cur){
+    if (adj[cur].size() == 0 || (adj[cur].size() == 1 && p[adj[cur][0]] != cur)) ++ans;
+    for (int nxt : adj[cur]){
+        if (p[cur] == nxt) continue;
+        dfs(nxt);
     }
-
-    if (isLeaf) return 1;
-    
-    int num = 0; 
-    for (int c : child){
-        num += LeafNum(c);
-    }
-    return num;
 }
 
 int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
 
+    int n;
     int root;
     cin >> n;
     for (int i = 0; i < n; ++i){
@@ -34,19 +25,25 @@ int main(){
         if (p[i] == -1) root = i;
     }
 
-    // cout << LeafNum(1) << '\n';
-
     int target;
     cin >> target;
-    p[target] = -1;
-    // if (p[target] == root && find(p, p+n, root) == p+n){
-    //     cout << "1\n";
-    //     return 0;
-    // }
-    if (target == root){
+    if (target == root) {
         cout << "0\n";
         return 0;
     }
-    cout << LeafNum(root) << '\n';
+
+    for (int i = 0; i < n; ++i){
+        int u,v;
+        u = i;
+        v = p[i];
+        if (v == -1 || u == target){
+            continue;
+        }
+
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    dfs(root);
+    cout << ans << '\n';
     return 0;
 }

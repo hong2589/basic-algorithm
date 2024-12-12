@@ -3,30 +3,22 @@ using namespace std;
 
 vector<int> adj[100001];
 int p[100001];
-int vertex_num[100001];
+int vertexNum[100001];
 
-void dfs(int cur){
+int dfs(int cur){
+    if (adj[cur].size() == 1 && p[cur] == adj[cur][0]) {
+        vertexNum[cur] = 1;
+        return 1;
+    }
+
+    int res = 1;
     for (int nxt : adj[cur]){
-        if (nxt == p[cur]) continue;
+        if (p[cur] == nxt) continue;
         p[nxt] = cur;
-        dfs(nxt);
+        res += dfs(nxt);
     }
-}
-
-void countVertex(int cur){
-    int cnt = 1;
-    for (int nxt : adj[cur]){
-        if (nxt == p[cur]){
-            if (adj[cur].size() == 1){
-                // leaf
-                vertex_num[nxt] = 1;
-            }
-            continue;
-        }
-        countVertex(nxt);
-        cnt += vertex_num[nxt];
-    }
-    vertex_num[cur] = cnt;
+    vertexNum[cur] = res;
+    return res;
 }
 
 int main(){
@@ -41,13 +33,12 @@ int main(){
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
-    dfs(r);
-    countVertex(r);
 
+    dfs(r);
     while (q--){
-        int root;
-        cin >> root;
-        cout << vertex_num[root] << '\n';
+        int query;
+        cin >> query;
+        cout << vertexNum[query] << '\n';
     }
     return 0;
 }
