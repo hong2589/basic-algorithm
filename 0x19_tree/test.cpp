@@ -2,14 +2,9 @@
 using namespace std;
 
 int main(){
-    vector<int> arr = {1,2,3,4,5};
-    vector<int>::iterator it = arr.end();
-    arr.insert(it,0);
-    for (int x : arr) cout << x << ' ';
-
-    it = arr.begin();
-    next(it);
-    cout << *it;
-    cout << '\n';
+    int arr[10] = {};
+    arr[0]++;
+    arr[1]++;
+    cout << arr[0] << ' ' << arr[1] << '\n';
     return 0;
 }
