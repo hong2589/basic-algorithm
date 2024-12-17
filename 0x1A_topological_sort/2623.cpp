@@ -3,6 +3,7 @@ using namespace std;
 
 vector<int> adj[1001];
 int indeg[1001];
+bool vis[1001];
 
 int main(){
     ios::sync_with_stdio(0);
@@ -11,49 +12,53 @@ int main(){
     int n,m;
     cin >> n >> m;
     while (m--){
-        int num;
-        cin >> num;
-        if (num == 0) continue;
-        int u = 0;
-        int v;
-        while (num--){
+        int k;
+        int u,v;
+        cin >> k;
+        cin >> u;
+        for (int i = 0; i < k-1; ++i){
             cin >> v;
-            adj[u].push_back(v);
-            if (u != 0) indeg[v] += 1;
+            if (find(adj[u].begin(), adj[u].end(), v) == adj[u].end()){
+                adj[u].push_back(v);
+                indeg[v]++;
+            }
             u = v;
         }
     }
 
-    queue<int> q;
-    vector<int> result;
-    for (int i = 1; i <= n; ++i){
-        if (indeg[i] == 0) q.push(i);
-    }
 
+    queue<int> q;
+    vector<int> ans;
+    bool chk = true;
+    for (int i = 1; i <= n; ++i){
+        if (indeg[i] == 0) {
+            q.push(i);
+            vis[i] = true;
+        }
+    }
     while (!q.empty()){
         int cur = q.front();
         q.pop();
-        result.push_back(cur);
+        ans.push_back(cur);
         for (int nxt : adj[cur]){
-            indeg[nxt] -= 1;
+            if (vis[nxt]) chk = false;
+            indeg[nxt]--;
             if (indeg[nxt] == 0) q.push(nxt);
         }
     }
 
-    bool isCycle = false;
-    for (int i = 1; i <= n; ++i){
-        if (indeg[i] != 0){
-            isCycle = true;
-            break;
-        }
-    }
-    if (isCycle){
+    if (q.empty() && ans.size() != n){
         cout << "0\n";
+        return 0;
+    }
+
+    if (chk){
+        for (int val : ans){
+            cout << val << '\n';
+        }
     }
     else {
-        for (int v : result){
-            cout << v << '\n';
-        }
+        cout << "0\n";
     }
     return 0;
 }

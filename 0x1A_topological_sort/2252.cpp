@@ -14,28 +14,27 @@ int main(){
         int u,v;
         cin >> u >> v;
         adj[u].push_back(v);
-        indeg[v] += 1;
+        indeg[v]++;
     }
 
+
     queue<int> q;
-    vector<int> res;
     for (int i = 1; i <= n; ++i){
-        if (indeg[i] == 0) q.push(i);
+        if (indeg[i] == 0){
+            q.push(i);
+        }
     }
 
     while (!q.empty()){
         int cur = q.front();
         q.pop();
-        res.push_back(cur);
+        cout << cur << ' ';
         for (int nxt : adj[cur]){
             indeg[nxt]--;
             if (indeg[nxt] == 0) q.push(nxt);
         }
     }
-
-    for (int v : res){
-        cout << v << ' ';
-    }
     cout << '\n';
+    
     return 0;
 }
