@@ -2,16 +2,15 @@
 
 #include <bits/stdc++.h>
 using namespace std;
-
-tuple<int,int,int> edge[100001]; // <u,v,cost>
-vector<int> p(10001,-1);
 typedef long long ll;
+
+vector<tuple<int,int,int>> edge;
+vector<int> p(10001, -1);
 
 int find(int x){
     if (p[x] < 0) return x;
     return p[x] = find(p[x]);
 }
-
 bool uni(int u, int v){
     u = find(u);
     v = find(v);
@@ -22,31 +21,29 @@ bool uni(int u, int v){
     return true;
 }
 
-bool comp(tuple<int,int,int> e1, tuple<int,int,int> e2){
-    return get<2>(e1) < get<2>(e2);
-}
-
 int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
 
-    int v,e;
-    cin >> v >> e;
-    for (int i = 0; i < e; ++i){
-        int u,v,cost;
-        cin >> u >> v >> cost;
-        edge[i] = tie(u,v,cost);
+    int n,m;
+    cin >> n >> m;
+    for (int i = 0; i < m; ++i){
+        int u,v,c;
+        cin >> u >> v >> c;
+        edge.push_back({c,u,v});
     }
-    sort(edge, edge+e, comp);
+    sort(edge.begin(), edge.end());
 
-    ll sum = 0;
-    for (int i = 0; i < e; ++i){
-        int u,v,cost;
-        tie(u,v,cost) = edge[i];
+    ll ans = 0;
+    for (int i = 0; i < m; ++i){
+        int c = get<0>(edge[i]);
+        int u = get<1>(edge[i]);
+        int v = get<2>(edge[i]);
         if (uni(u,v)){
-            sum += cost;
+            ans += c;
         }
     }
-    cout << sum << '\n';
+    cout << ans << '\n';
+    
     return 0;
 }
