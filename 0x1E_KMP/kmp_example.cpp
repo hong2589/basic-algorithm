@@ -18,9 +18,8 @@ bool find(string& a, string& b){
 
 vector<int> failure(string& s){
     vector<int> f(s.size()); // initialize to f = {0, 0, 0, ..., 0}
-    int len = (int)s.size();
     int j = 0;
-    for (int i = 1; i < len; ++i){
+    for (int i = 1; i < s.size(); ++i){ // start with i = 1, not 0
         while (j > 0 && s[i] != s[j]) j = f[j-1];
         if (s[i] == s[j]) f[i] = ++j;
     }
@@ -30,8 +29,7 @@ vector<int> failure(string& s){
 bool kmp(string& a, string& b){
     vector<int> f = failure(b);
     int j = 0;
-    int len = (int)a.size();
-    for (int i = 0; i < len; ++i){
+    for (int i = 0; i < (int)a.size(); ++i){
         while (j > 0 && a[i] != b[j]) j = f[j-1];
         if (a[i] == b[j]) j++;
         if (j == b.size()) return true;

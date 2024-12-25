@@ -11,25 +11,17 @@ vector<int> failure(string& s){
     return f;
 }
 
-bool kmp(string& s, string& p){
-    vector<int> f = failure(s);
-    int j = 0;
-    for (int i = 0; i < s.size(); ++i){
-        while (j > 0 && s[i] != p[j]) j = f[j-1];
-        if (s[i] == p[j]) ++j;
-        if (j == p.size()) return true;
-    }
-    return false;
-}
-
-
 int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
 
-    string s,p;
-    cin >> s >> p;
-    cout << kmp(s,p) << '\n';
+    int n;
+    string s;
+    cin >> n;
+    cin >> s;
+
+    vector<int> f = failure(s);
+    cout << n - f[n-1] << '\n';
 
     return 0;
 }
